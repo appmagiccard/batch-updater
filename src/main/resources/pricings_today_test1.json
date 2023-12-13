@@ -1,0 +1,153 @@
+{
+	"meta": {
+		"date": "2023-12-12",
+		"version": "5.2.2+20231212"
+	},
+	"data": {
+		"f182e364-0439-5594-a6e6-75f7889ccf45": {
+			"mtgo": {
+				"cardhoarder": {
+					"retail": {
+						"normal": {
+							"2023-12-12": 0.03
+						},
+						"foil": {}
+					},
+					"currency": "USD"
+				}
+			}
+		},
+		"330deaa3-dd7a-52a8-bfbc-b323cd16a409": {
+			"mtgo": {
+				"cardhoarder": {
+					"retail": {
+						"normal": {
+							"2023-12-12": 0.17
+						},
+						"foil": {}
+					},
+					"currency": "USD"
+				}
+			}
+		},
+		"79e36956-b91f-580f-8309-7d9585a67560": {
+			"mtgo": {
+				"cardhoarder": {
+					"retail": {
+						"normal": {
+							"2023-12-12": 0.02
+						},
+						"foil": {}
+					},
+					"currency": "USD"
+				}
+			}
+		}
+	},
+	"0637f38f-fd82-584f-94e4-3d2d13360f34": {
+		"mtgo": {
+			"cardhoarder": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.06
+					},
+					"foil": {
+						"2023-12-12": 0.14
+					}
+				},
+				"currency": "USD"
+			}
+		},
+		"paper": {
+			"tcgplayer": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.19
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			},
+			"cardmarket": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.05
+					},
+					"foil": {}
+				},
+				"currency": "EUR"
+			},
+			"cardkingdom": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.35
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			},
+			"cardsphere": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.23
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			}
+		}
+	},
+	"6c502fe2-b243-51aa-befc-0032654f51f4": {
+		"mtgo": {
+			"cardhoarder": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.12
+					},
+					"foil": {
+						"2023-12-12": 0.02
+					}
+				},
+				"currency": "USD"
+			}
+		},
+		"paper": {
+			"tcgplayer": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.16
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			},
+			"cardmarket": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.1
+					},
+					"foil": {}
+				},
+				"currency": "EUR"
+			},
+			"cardkingdom": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.35
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			},
+			"cardsphere": {
+				"retail": {
+					"normal": {
+						"2023-12-12": 0.23
+					},
+					"foil": {}
+				},
+				"currency": "USD"
+			}
+		}
+	}
+}
