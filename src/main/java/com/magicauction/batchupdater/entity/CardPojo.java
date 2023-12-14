@@ -1,5 +1,7 @@
 package com.magicauction.batchupdater.entity;
 
+import jakarta.persistence.Entity;
+
 import java.util.HashMap;
 
 public record CardPojo(
