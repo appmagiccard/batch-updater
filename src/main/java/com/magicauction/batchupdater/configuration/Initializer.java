@@ -15,6 +15,7 @@ public class Initializer {
 
     private final Loader loader;
     private final DatabaseUpdater updater;
+    private static final String JSON_PATH = "test_3cards.json";
 
     @Autowired
     public Initializer(Loader loader, DatabaseUpdater updater) {
@@ -25,7 +26,7 @@ public class Initializer {
     //TODO: VA A ESTAR DIFICIL DE TESTEAR
     @Bean
     CommandLineRunner init() {
-        ArrayList<CardPojo> cards = loader.loadCardsFromJson();
+        ArrayList<CardPojo> cards = loader.loadCardsFromJson(JSON_PATH);
         boolean result = updater.updateDb(cards);
         return args -> {};
     }

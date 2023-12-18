@@ -7,17 +7,15 @@ import com.magicauction.batchupdater.entity.PriceMap;
 import com.magicauction.batchupdater.entity.UriMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 import java.util.Map;
 
-@Component
-public class Converter {
+public abstract class Converter {
 
     private static final Logger log = LoggerFactory.getLogger(Converter.class);
 
-    public CardPojo toCardPojo(JsonNode json){
+    public static CardPojo toCardPojo(JsonNode json){
         String name = json.findValue("name").asText();
         String scryfallId = json.findValue("id").asText();
         String imgStatus = json.findValue("image_status").asText();
@@ -50,7 +48,7 @@ public class Converter {
         );
     }
 
-    private UriMap toUriMap(JsonNode jsonUris) throws JsonProcessingException {
+    private static UriMap toUriMap(JsonNode jsonUris) throws JsonProcessingException {
         UriMap map = new UriMap();
         Iterator<Map.Entry<String, JsonNode>> fields = jsonUris.fields();
         while (fields.hasNext()){
@@ -60,7 +58,7 @@ public class Converter {
         return map;
     }
 
-    private PriceMap toPriceMap(JsonNode prices) throws JsonProcessingException {
+    private static PriceMap toPriceMap(JsonNode prices) throws JsonProcessingException {
         PriceMap map = new PriceMap();
         Iterator<Map.Entry<String, JsonNode>> fields = prices.fields();
         while (fields.hasNext()){
@@ -70,7 +68,7 @@ public class Converter {
         return map;
     }
 
-    private Float toFloat(JsonNode value){
+    private static Float toFloat(JsonNode value){
         return Float.valueOf(value.isNull() ? "0" : value.asText());
     }
 }

@@ -15,25 +15,23 @@ import java.util.ArrayList;
 public class Loader {
 
     private static final Logger log = LoggerFactory.getLogger(Loader.class);
-    private final Converter converter;
     private final ObjectMapper mapper;
 
+
     @Autowired
-    public Loader(Converter converter) {
-        this.converter = converter;
+    public Loader() {
         this.mapper = new ObjectMapper();
     }
 
-    public ArrayList<CardPojo> loadCardsFromJson(){
+    public ArrayList<CardPojo> loadCardsFromJson(String path){
         ArrayList<CardPojo> cards = new ArrayList<>();
-        String path = "test_3cards.json";
         log.info("Loading from path: {}", path);
 
         try(InputStream in=Thread.currentThread().getContextClassLoader().getResourceAsStream(path)){
             JsonNode arrayNode = mapper.readTree(in);
             if (arrayNode.isArray())
                 for(JsonNode node : arrayNode)
-                    cards.add(converter.toCardPojo(node));
+                    cards.add(Converter.toCardPojo(node));
 
             log.info("Cards transformed successfully - result {}",cards);
         }
