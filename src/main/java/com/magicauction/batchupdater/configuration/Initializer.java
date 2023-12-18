@@ -22,6 +22,7 @@ public class Initializer {
         this.updater = updater;
     }
 
+    //TODO: VA A ESTAR DIFICIL DE TESTEAR
     @Bean
     CommandLineRunner init() {
         ArrayList<CardPojo> cards = loader.loadCardsFromJson();

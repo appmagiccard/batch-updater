@@ -39,7 +39,7 @@ public class DatabaseUpdater {
 
     private boolean updateExistingCards(List<CardPojo> cards) {
         for (CardPojo card : cards){
-            Card oldC = cardRepository.findByMultiverseId(card.multiverseId()).orElseThrow(RuntimeException::new);
+            Card oldC = cardRepository.findByMultiverseId(card.scryfallId()).orElseThrow(RuntimeException::new);
             oldC.setPrices(card.prices().toString());
             cardRepository.save(oldC);
         }
@@ -57,7 +57,7 @@ public class DatabaseUpdater {
     private Card toDb(CardPojo card) {
         Card nc = new Card();
         nc.setName(card.name());
-        nc.setMultiverseId(card.multiverseId());
+        nc.setScryfallId(card.scryfallId());
         nc.setImgStatus(card.imgStatus());
         nc.setFoil(card.isFoil());
         nc.setSetName(card.setName());
@@ -73,7 +73,7 @@ public class DatabaseUpdater {
         boolean exist = false;
         for (Card card : cards){
             if(!exist)
-               exist = card.getMultiverseId().equals(nc.multiverseId());
+               exist = card.getScryfallId().equals(nc.scryfallId());
         }
         return exist;
     }

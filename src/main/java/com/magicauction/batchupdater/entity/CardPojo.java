@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public record CardPojo(
         String name,
-        String multiverseId,
+        String scryfallId,
         String imgStatus,
         boolean isFoil,
         String setName,

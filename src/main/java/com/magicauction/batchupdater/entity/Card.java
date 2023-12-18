@@ -13,7 +13,7 @@ public class Card {
     private Long id;
 
     private String name;
-    private String multiverseId;
+    private String scryfallId;
     private String imgStatus;
     private boolean isFoil;
     private String setName;
@@ -27,7 +27,7 @@ public class Card {
         return "Card{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", multiverseId='" + multiverseId + '\'' +
+                ", scryfallId='" + scryfallId + '\'' +
                 ", imgStatus='" + imgStatus + '\'' +
                 ", isFoil=" + isFoil +
                 ", setName='" + setName + '\'' +
@@ -43,12 +43,12 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(multiverseId, card.multiverseId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(setName, card.setName) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri);
+        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(setName, card.setName) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, multiverseId, imgStatus, isFoil, setName, prices, imageUri, relatedUri, purchaseUri);
+        return Objects.hash(id, name, scryfallId, imgStatus, isFoil, setName, prices, imageUri, relatedUri, purchaseUri);
     }
 
     public Long getId() {
@@ -67,12 +67,12 @@ public class Card {
         this.name = name;
     }
 
-    public String getMultiverseId() {
-        return multiverseId;
+    public String getScryfallId() {
+        return scryfallId;
     }
 
-    public void setMultiverseId(String multiverseId) {
-        this.multiverseId = multiverseId;
+    public void setScryfallId(String scryfallId) {
+        this.scryfallId = scryfallId;
     }
 
     public String getImgStatus() {
@@ -131,10 +131,10 @@ public class Card {
         this.purchaseUri = purchaseUri;
     }
 
-    public Card(Long id, String name, String multiverseId, String imgStatus, boolean isFoil, String setName, String prices, String imageUri, String relatedUri, String purchaseUri) {
+    public Card(Long id, String name, String scryfallId, String imgStatus, boolean isFoil, String setName, String prices, String imageUri, String relatedUri, String purchaseUri) {
         this.id = id;
         this.name = name;
-        this.multiverseId = multiverseId;
+        this.scryfallId = scryfallId;
         this.imgStatus = imgStatus;
         this.isFoil = isFoil;
         this.setName = setName;

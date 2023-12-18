@@ -19,7 +19,7 @@ public class Converter {
 
     public CardPojo toCardPojo(JsonNode json){
         String name = json.findValue("name").asText();
-        String mltvId = json.findValue("id").asText();
+        String scryfallId = json.findValue("id").asText();
         String imgStatus = json.findValue("image_status").asText();
         String setName = json.findValue("set").asText();
         boolean isFoil = json.findValue("foil").asBoolean();
@@ -39,7 +39,7 @@ public class Converter {
 
         return new CardPojo(
                 name,
-                mltvId,
+                scryfallId,
                 imgStatus,
                 isFoil,
                 setName,
