@@ -25,7 +25,7 @@ public class DatabaseUpdater {
     }
 
     public boolean updateDb(ArrayList<CardPojo> cards) {
-        log.info("Starting loading Database with: {}", cards);
+        log.debug("Starting loading Database with: {}", cards);
         ArrayList<Card> all = (ArrayList<Card>) cardRepository.findAll();
         Map<Boolean, List<CardPojo>> map = cards.stream().collect(Collectors.partitioningBy(nc -> cardExistOnDatabase(nc, all)));
 
