@@ -1,5 +1,6 @@
 package com.magicauction.batchupdater.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,13 +14,22 @@ public class Card {
     private Long id;
 
     private String name;
+
     private String scryfallId;
+
     private String imgStatus;
+
     private boolean isFoil;
+
     private String setName;
+
+    @Column(name = "prices", columnDefinition = "longtext")
     private String prices;
+    @Column(name = "image_uri", columnDefinition = "longtext")
     private String imageUri;
+    @Column(name = "related_uri", columnDefinition = "longtext")
     private String relatedUri;
+    @Column(name = "purchase_uri", columnDefinition = "longtext")
     private String purchaseUri;
 
     @Override
