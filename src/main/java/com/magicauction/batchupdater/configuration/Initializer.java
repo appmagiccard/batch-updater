@@ -31,9 +31,10 @@ public class Initializer {
     //TODO: VA A ESTAR DIFICIL DE TESTEAR
     @Bean
     CommandLineRunner init() throws WriteBigJsonToDiskException {
-        Path pathToJson = loader.downloadJson(COLLECTION_TO_DOWNLOAD);
-        ArrayList<CardPojo> cards = loader.loadCardsFromJson(pathToJson);
-        boolean result = updater.updateDb(cards);
+        boolean result = true;
+                //process();
         return args -> log.info("Process finished succesfully? result: {}", result);
     }
+
+
 }
