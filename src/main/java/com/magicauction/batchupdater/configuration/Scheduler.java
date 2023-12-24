@@ -1,6 +1,7 @@
 package com.magicauction.batchupdater.configuration;
 
 import com.magicauction.batchupdater.entity.CardPojo;
+import com.magicauction.batchupdater.exceptions.RestCallException;
 import com.magicauction.batchupdater.exceptions.WriteBigJsonToDiskException;
 import com.magicauction.batchupdater.processor.DatabaseUpdater;
 import com.magicauction.batchupdater.processor.Loader;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class Scheduler {
@@ -32,16 +34,27 @@ public class Scheduler {
     public void scheduledProcess() throws WriteBigJsonToDiskException {
         Date start =  new Date();
         log.info("Started process on Date [{}]",start);
-        boolean result = process();
+        boolean result = false;
+        try{
+        result = process();
+        }catch (RuntimeException e){
+            log.error("Run time error -> MSG[{}]", e.getLocalizedMessage());
+        }catch (Exception e){
+            log.error("checked error -> MSG[{}]", e.getLocalizedMessage());
+        }
         Date end =  new Date();
         Long elapsed = (end.toInstant().getEpochSecond() - start.toInstant().getEpochSecond());
         log.info("Process finished succesfully? result: {} - Date [{}] - Elapsed [{}]", result, end, elapsed);
 
     }
 
-    private boolean process() throws WriteBigJsonToDiskException {
-        Path pathToJson = loader.downloadJson(COLLECTION_TO_DOWNLOAD);
-        ArrayList<CardPojo> cards = loader.loadCardsFromJson(pathToJson);
-        return updater.updateDb(cards);
+    private boolean process() throws WriteBigJsonToDiskException, RestCallException {
+        List<Path> pathsToJson = loader.downloadJson(COLLECTION_TO_DOWNLOAD);
+        ArrayList<Boolean> partials = new ArrayList<>();
+        for(Path path : pathsToJson){
+            ArrayList<CardPojo> cards = loader.loadCardsFromJson(path);
+            partials.add(updater.updateDb(cards));
+        }
+        return partials.stream().reduce((one, two)->one&&two).orElse(false);
     }
 }

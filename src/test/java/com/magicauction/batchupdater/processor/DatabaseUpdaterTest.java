@@ -10,14 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class DatabaseUpdaterTest {
@@ -27,10 +30,19 @@ class DatabaseUpdaterTest {
     private static final String SCRYFALL_3 = "3";
     private DatabaseUpdater databaseUpdater;
     @Mock private CardRepository cardRepository;
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @BeforeEach
     void init_tests(){
-        databaseUpdater = new DatabaseUpdater(cardRepository);
+        int cores = Runtime.getRuntime().availableProcessors();
+        taskExecutor = new ThreadPoolTaskExecutor();
+        //executor.setQueueCapacity(100);
+        taskExecutor.setMaxPoolSize(cores);
+        //executor.setCorePoolSize(2);
+        taskExecutor.setThreadNamePrefix("poolThread-");
+        taskExecutor.initialize();
+
+        databaseUpdater = new DatabaseUpdater(cardRepository, taskExecutor);
     }
 
     @Test
@@ -38,10 +50,10 @@ class DatabaseUpdaterTest {
         assertThrows(RuntimeException.class, () -> databaseUpdater.updateDb(cardPojoList()));
     }
     @Test void updateDB_whenIsOk(){
-        when(cardRepository.findAll()).thenReturn(cardList());
-        when(cardRepository.findByScryfallId(SCRYFALL_1)).thenReturn(Optional.of(card(SCRYFALL_1)));
-        when(cardRepository.findByScryfallId(SCRYFALL_2)).thenReturn(Optional.of(card(SCRYFALL_2)));
-        when(cardRepository.findByScryfallId(SCRYFALL_3)).thenReturn(Optional.of(card(SCRYFALL_3)));
+        doReturn(Optional.of(card(SCRYFALL_1))).when(cardRepository).findByScryfallId(SCRYFALL_1);
+        doReturn(Optional.of(card(SCRYFALL_2))).when(cardRepository).findByScryfallId(SCRYFALL_2);
+        doReturn(Optional.of(card(SCRYFALL_3))).when(cardRepository).findByScryfallId(SCRYFALL_3);
+
         boolean b = databaseUpdater.updateDb(cardPojoList());
         assertTrue(b);
     }

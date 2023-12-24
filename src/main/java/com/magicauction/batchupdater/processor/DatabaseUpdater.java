@@ -6,11 +6,14 @@ import com.magicauction.batchupdater.entity.repository.CardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,63 +21,45 @@ public class DatabaseUpdater {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseUpdater.class);
     private final CardRepository cardRepository;
+    private final Executor taskExecutor;
 
     @Autowired
-    public DatabaseUpdater(CardRepository cardRepository) {
+    public DatabaseUpdater(CardRepository cardRepository, Executor taskExecutor) {
         this.cardRepository = cardRepository;
+        this.taskExecutor = taskExecutor;
     }
 
     public boolean updateDb(ArrayList<CardPojo> cards) {
-        log.debug("Starting loading Database with: {}", cards);
-        ArrayList<Card> all = (ArrayList<Card>) cardRepository.findAll();
-        Map<Boolean, List<CardPojo>> map = cards.stream().collect(Collectors.partitioningBy(nc -> cardExistOnDatabase(nc, all)));
-
-        log.debug("map.true: {}", map.get(Boolean.TRUE));
-        log.debug("map.false: {}", map.get(Boolean.FALSE));
-
-        boolean newCardsLoaded = loadNewCards(map.get(Boolean.FALSE));
-        boolean updatedExistingCards = updateExistingCards(map.get(Boolean.TRUE));
-        return newCardsLoaded && updatedExistingCards;
+        ArrayList<CompletableFuture<CardPojo>> futures = new ArrayList<>();
+        for(CardPojo c : cards){
+            CompletableFuture<CardPojo> cardPojoCompletableFuture =
+                    CompletableFuture.supplyAsync(() -> updateOneCard(c), taskExecutor);
+            futures.add(cardPojoCompletableFuture);
+        }
+        List<CardPojo> completedFutures = futures.stream().map(CompletableFuture::join)
+                .collect(Collectors.toList());
+        //cards.stream().map(this::updateOneCard).collect(Collectors.toList());
+        log.debug("Futuros Completados: {}", completedFutures);
+        return !completedFutures.isEmpty();
     }
 
-    private boolean updateExistingCards(List<CardPojo> cards) {
-        for (CardPojo card : cards){
-            Card oldC = cardRepository.findByScryfallId(card.scryfallId()).orElseThrow(RuntimeException::new);
+    @Async
+    private CardPojo updateOneCard(CardPojo card) {
+        Optional<Card> oldCOpt = cardRepository.findByScryfallId(card.scryfallId());
+        log.debug("<------?!??! ~~eXeC7t0r: {}~~ ?!??!------>", Thread.currentThread().getName());
+        if (oldCOpt.isPresent()){
+            //update existing card
+            Card oldC = oldCOpt.get();
             oldC.setPrices(card.prices().toString());
             cardRepository.save(oldC);
+            log.debug("CARD IS PRESENT: [{}] - [{}]", oldC.getName(), oldC.getScryfallId());
+        }else{
+            //add new card
+            cardRepository.save(Converter.toDb(card));
+            log.debug("CARD NOT IS PRESENT: [{}] - [{}]", card.name(), card.scryfallId());
         }
-        return Boolean.TRUE;
+        return card;
     }
 
-    private boolean loadNewCards(List<CardPojo> cards) {
-        for (CardPojo card : cards){
-            Card c = toDb(card);
-            cardRepository.save(c);
-        }
-        return Boolean.TRUE;
-    }
 
-    private Card toDb(CardPojo card) {
-        Card nc = new Card();
-        nc.setName(card.name());
-        nc.setScryfallId(card.scryfallId());
-        nc.setImgStatus(card.imgStatus());
-        nc.setFoil(card.isFoil());
-        nc.setSetName(card.setName());
-        nc.setPrices(card.prices().toString());
-        nc.setRelatedUri(card.relatedUri().toString());
-        nc.setImageUri(card.imageUri().toString());
-        nc.setPurchaseUri(card.purchaseUri().toString());
-        log.debug("Pojo translated: og {} - toDb {}", card, nc);
-        return nc;
-    }
-
-    private boolean cardExistOnDatabase(CardPojo nc, ArrayList<Card> cards){
-        boolean exist = false;
-        for (Card card : cards){
-            if(!exist)
-               exist = card.getScryfallId().equals(nc.scryfallId());
-        }
-        return exist;
-    }
 }

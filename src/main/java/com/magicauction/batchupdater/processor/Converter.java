@@ -2,6 +2,7 @@ package com.magicauction.batchupdater.processor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.magicauction.batchupdater.entity.Card;
 import com.magicauction.batchupdater.entity.CardPojo;
 import com.magicauction.batchupdater.entity.PriceMap;
 import com.magicauction.batchupdater.entity.UriMap;
@@ -48,6 +49,21 @@ public abstract class Converter {
         );
     }
 
+    public static Card toDb(CardPojo card) {
+        Card nc = new Card();
+        nc.setName(card.name());
+        nc.setScryfallId(card.scryfallId());
+        nc.setImgStatus(card.imgStatus());
+        nc.setFoil(card.isFoil());
+        nc.setSetName(card.setName());
+        nc.setPrices(card.prices().toString());
+        nc.setRelatedUri(card.relatedUri().toString());
+        nc.setImageUri(card.imageUri().toString());
+        nc.setPurchaseUri(card.purchaseUri().toString());
+        log.debug("Pojo translated: og {} - toDb {}", card, nc);
+        return nc;
+    }
+
     private static UriMap toUriMap(JsonNode jsonUris) throws JsonProcessingException {
         UriMap map = new UriMap();
         Iterator<Map.Entry<String, JsonNode>> fields = jsonUris.fields();
@@ -71,4 +87,5 @@ public abstract class Converter {
     private static Float toFloat(JsonNode value){
         return Float.valueOf(value.isNull() ? "0" : value.asText());
     }
+
 }
