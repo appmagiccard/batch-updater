@@ -16,9 +16,9 @@ public class AsyncConfig {
         int cores = Runtime.getRuntime().availableProcessors();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         //executor.setQueueCapacity(100);
-        executor.setMaxPoolSize(cores);
+        //executor.setMaxPoolSize(cores);
         //executor.setCorePoolSize(2);
-        executor.setThreadNamePrefix("poolThread-");
+        executor.setThreadNamePrefix("test1-poolThread-");
         executor.initialize();
         return executor;
     }

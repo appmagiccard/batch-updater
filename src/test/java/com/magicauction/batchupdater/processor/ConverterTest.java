@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -145,6 +147,7 @@ class ConverterTest {
                 "highres_scan",
                 false,
                 "7ed",
+                new Date(),
                 new PriceMap(),
                 new UriMap(),
                 new UriMap(),
@@ -162,6 +165,7 @@ class ConverterTest {
                 "highres_scan",
                 false,
                 "7ed",
+                new Date(),
                 new PriceMap(),
                 new UriMap(),
                 new UriMap(),

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +33,8 @@ public class Card {
     @Column(name = "purchase_uri", columnDefinition = "longtext")
     private String purchaseUri;
 
+    private Date lastModification;
+
     @Override
     public String toString() {
         return "Card{" +
@@ -41,10 +44,11 @@ public class Card {
                 ", imgStatus='" + imgStatus + '\'' +
                 ", isFoil=" + isFoil +
                 ", setName='" + setName + '\'' +
-                ", prices=" + prices +
-                ", imageUri=" + imageUri +
-                ", relatedUri=" + relatedUri +
-                ", purchaseUri=" + purchaseUri +
+                ", prices='" + prices + '\'' +
+                ", imageUri='" + imageUri + '\'' +
+                ", relatedUri='" + relatedUri + '\'' +
+                ", purchaseUri='" + purchaseUri + '\'' +
+                ", lastModification=" + lastModification +
                 '}';
     }
 
@@ -53,12 +57,12 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(setName, card.setName) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri);
+        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(setName, card.setName) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri) && Objects.equals(lastModification, card.lastModification);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, scryfallId, imgStatus, isFoil, setName, prices, imageUri, relatedUri, purchaseUri);
+        return Objects.hash(id, name, scryfallId, imgStatus, isFoil, setName, prices, imageUri, relatedUri, purchaseUri, lastModification);
     }
 
     public Long getId() {
@@ -141,7 +145,15 @@ public class Card {
         this.purchaseUri = purchaseUri;
     }
 
-    public Card(Long id, String name, String scryfallId, String imgStatus, boolean isFoil, String setName, String prices, String imageUri, String relatedUri, String purchaseUri) {
+    public Date getLastModification() {
+        return lastModification;
+    }
+
+    public void setLastModification(Date lastModification) {
+        this.lastModification = lastModification;
+    }
+
+    public Card(Long id, String name, String scryfallId, String imgStatus, boolean isFoil, String setName, String prices, String imageUri, String relatedUri, String purchaseUri, Date lastModification) {
         this.id = id;
         this.name = name;
         this.scryfallId = scryfallId;
@@ -152,6 +164,7 @@ public class Card {
         this.imageUri = imageUri;
         this.relatedUri = relatedUri;
         this.purchaseUri = purchaseUri;
+        this.lastModification = lastModification;
     }
 
     public Card() {

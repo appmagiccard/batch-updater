@@ -4,6 +4,7 @@ import com.magicauction.batchupdater.entity.CardPojo;
 import com.magicauction.batchupdater.exceptions.RestCallException;
 import com.magicauction.batchupdater.exceptions.WriteBigJsonToDiskException;
 import com.magicauction.batchupdater.processor.DatabaseUpdater;
+import com.magicauction.batchupdater.processor.Downloader;
 import com.magicauction.batchupdater.processor.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,15 @@ public class Scheduler {
 
     private final Loader loader;
     private final DatabaseUpdater updater;
+    private final Downloader downloader;
     private static final String COLLECTION_TO_DOWNLOAD = "default_cards";
     private static final Logger log = LoggerFactory.getLogger(Scheduler.class);
 
     @Autowired
-    public Scheduler(Loader loader, DatabaseUpdater updater) {
+    public Scheduler(Loader loader, DatabaseUpdater updater, Downloader downloader) {
         this.loader = loader;
         this.updater = updater;
+        this.downloader = downloader;
     }
 
     @Scheduled(cron = "${cron-string}")
@@ -49,7 +52,7 @@ public class Scheduler {
     }
 
     private boolean process() throws WriteBigJsonToDiskException, RestCallException {
-        List<Path> pathsToJson = loader.downloadJson(COLLECTION_TO_DOWNLOAD);
+        List<Path> pathsToJson = downloader.downloadJson(COLLECTION_TO_DOWNLOAD);
         ArrayList<Boolean> partials = new ArrayList<>();
         for(Path path : pathsToJson){
             ArrayList<CardPojo> cards = loader.loadCardsFromJson(path);

@@ -1,5 +1,6 @@
 package com.magicauction.batchupdater.entity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ public record CardPojo(
         String imgStatus,
         boolean isFoil,
         String setName,
+        Date lastMod,
         HashMap<String, Float> prices,
         HashMap<String, String> imageUri,
         HashMap<String, String> relatedUri,

@@ -9,6 +9,7 @@ import com.magicauction.batchupdater.entity.UriMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public abstract class Converter {
                 imgStatus,
                 isFoil,
                 setName,
+                null,
                 prices,
                 images_uris,
                 related_uris,
@@ -49,7 +51,7 @@ public abstract class Converter {
         );
     }
 
-    public static Card toDb(CardPojo card) {
+    public static Card toEntity(CardPojo card) {
         Card nc = new Card();
         nc.setName(card.name());
         nc.setScryfallId(card.scryfallId());
@@ -60,6 +62,7 @@ public abstract class Converter {
         nc.setRelatedUri(card.relatedUri().toString());
         nc.setImageUri(card.imageUri().toString());
         nc.setPurchaseUri(card.purchaseUri().toString());
+        nc.setLastModification(new Date());
         log.debug("Pojo translated: og {} - toDb {}", card, nc);
         return nc;
     }

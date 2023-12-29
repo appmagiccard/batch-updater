@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -38,7 +39,6 @@ public class DatabaseUpdater {
         }
         List<CardPojo> completedFutures = futures.stream().map(CompletableFuture::join)
                 .collect(Collectors.toList());
-        //cards.stream().map(this::updateOneCard).collect(Collectors.toList());
         log.debug("Futuros Completados: {}", completedFutures);
         return !completedFutures.isEmpty();
     }
@@ -51,13 +51,15 @@ public class DatabaseUpdater {
             //update existing card
             Card oldC = oldCOpt.get();
             oldC.setPrices(card.prices().toString());
+            oldC.setLastModification(new Date());
             cardRepository.save(oldC);
             log.debug("CARD IS PRESENT: [{}] - [{}]", oldC.getName(), oldC.getScryfallId());
         }else{
             //add new card
-            cardRepository.save(Converter.toDb(card));
+            cardRepository.save(Converter.toEntity(card));
             log.debug("CARD NOT IS PRESENT: [{}] - [{}]", card.name(), card.scryfallId());
         }
+        log.info("Update finished for: {}", card.name());
         return card;
     }
 
