@@ -5,6 +5,7 @@ import com.magicauction.batchupdater.entity.CardPojo;
 import com.magicauction.batchupdater.entity.PriceMap;
 import com.magicauction.batchupdater.entity.UriMap;
 import com.magicauction.batchupdater.entity.repository.CardRepository;
+import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,21 +17,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-class DatabaseUpdaterTest {
+class BulkSaveDatabaseUpdaterTest {
 
     private static final String SCRYFALL_1 = "1";
     private static final String SCRYFALL_2 = "2";
     private static final String SCRYFALL_3 = "3";
-    private DatabaseUpdater databaseUpdater;
+    private BulkSaveDatabaseUpdater databaseUpdater;
     @Mock private CardRepository cardRepository;
+    @Mock private HikariDataSource hikariDataSource;
     private ThreadPoolTaskExecutor taskExecutor;
 
     @BeforeEach
@@ -43,7 +43,7 @@ class DatabaseUpdaterTest {
         taskExecutor.setThreadNamePrefix("poolThread-");
         taskExecutor.initialize();
 
-        databaseUpdater = new DatabaseUpdater(cardRepository, taskExecutor);
+        databaseUpdater = new BulkSaveDatabaseUpdater(cardRepository, taskExecutor, hikariDataSource);
     }
 
     @Test

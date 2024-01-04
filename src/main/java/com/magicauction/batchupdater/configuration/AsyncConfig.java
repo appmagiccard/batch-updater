@@ -15,10 +15,10 @@ public class AsyncConfig {
     public Executor taskExecutor() {
         int cores = Runtime.getRuntime().availableProcessors();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        //executor.setQueueCapacity(100);
-        //executor.setMaxPoolSize(cores);
+        executor.setQueueCapacity(100);
+        executor.setMaxPoolSize(cores);
         //executor.setCorePoolSize(2);
-        executor.setThreadNamePrefix("test1-poolThread-");
+        executor.setThreadNamePrefix("vortex-"+cores+"-pT-");
         executor.initialize();
         return executor;
     }
