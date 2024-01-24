@@ -1,8 +1,9 @@
 package com.magicauction.batchupdater.processor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.magicauction.batchupdater.entity.BulkDataObject;
 import com.magicauction.batchupdater.entity.BulkDataResponse;
+import com.magicauction.batchupdater.entity.ScryfallSetDataResponse;
+import com.magicauction.batchupdater.entity.ScryfallSetPojo;
 import com.magicauction.batchupdater.exceptions.RestCallException;
 import com.magicauction.batchupdater.exceptions.WriteBigJsonToDiskException;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class Downloader {
 
     private static final Logger log = LoggerFactory.getLogger(Downloader.class);
     private static final int N_SIZE = 1000;
+    private static final String SCRYFALL_API_BULK_DATA = "https://api.scryfall.com/bulk-data";
+    private static final String SET_DATA_URI = "https://api.scryfall.com/sets";
     private final RestClient bulkDataClient;
     private final RestClient restClient;
     private final Loader loader;
@@ -31,7 +34,7 @@ public class Downloader {
     @Autowired
     public Downloader(Loader loader) {
         this.loader = loader;
-        this.bulkDataClient = RestClient.builder().baseUrl("https://api.scryfall.com/bulk-data").build();
+        this.bulkDataClient = RestClient.builder().baseUrl(SCRYFALL_API_BULK_DATA).build();
         this.restClient = RestClient.builder().build();
     }
 
@@ -44,10 +47,6 @@ public class Downloader {
         log.info("Collection called: {} - Bulk Data retrieved: {} - Collection Selected: {}",collectionToDownload, data, selected);
 
         //call collectionToDownload
-        /*
-         * TODO: ACA HAY QUE PROBAR REACTIVE/WEBFLUX
-         * Con reactive podriamos hacer el update entero de un solo tiron!
-         */
         ParameterizedTypeReference<ArrayList<HashMap<String, Object>>> typeListOfObject = new ParameterizedTypeReference<>() {};
         ArrayList<HashMap<String, Object>> response = restClient.get().uri(selected.getDownload_uri()).retrieve().body(typeListOfObject);
         if(response == null)
@@ -67,5 +66,16 @@ public class Downloader {
 
     private BulkDataObject findCollection(String collectionToDownload, ArrayList<BulkDataObject> data) {
         return data.stream().filter(o -> o.getType().equals(collectionToDownload)).collect(Collectors.toList()).getFirst();
+    }
+
+    public List<ScryfallSetPojo> downloadAllSets() throws RestCallException {
+        ScryfallSetDataResponse response = restClient.get().uri(SET_DATA_URI).retrieve().body(ScryfallSetDataResponse.class);
+        log.info("Called Set API - URI: {}", SET_DATA_URI);
+        if(response == null)
+            throw new RestCallException();
+
+        log.info("Sets Retrieved - [type: {} ** hasMore: {} ** size: {}]", response.getObject(), response.isHasMore(), response.getData().size());
+        return response.getData();
+
     }
 }

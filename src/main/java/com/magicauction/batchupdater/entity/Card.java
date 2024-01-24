@@ -3,7 +3,10 @@ package com.magicauction.batchupdater.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.util.Date;
 import java.util.Objects;
@@ -11,7 +14,7 @@ import java.util.Objects;
 @Entity
 public class Card {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -22,7 +25,9 @@ public class Card {
 
     private boolean isFoil;
 
-    private String setName;
+    @ManyToOne
+    @JoinColumn(name="MAGIC_SETS", referencedColumnName = "id")
+    private MagicSet magicSet;
 
     @Column(name = "prices", columnDefinition = "longtext")
     private String prices;
@@ -40,10 +45,10 @@ public class Card {
         return "Card{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", scryfallId='" + scryfallId + '\'' +
+                ", id='" + scryfallId + '\'' +
                 ", imgStatus='" + imgStatus + '\'' +
                 ", isFoil=" + isFoil +
-                ", setName='" + setName + '\'' +
+                ", setCode='" + magicSet + '\'' +
                 ", prices='" + prices + '\'' +
                 ", imageUri='" + imageUri + '\'' +
                 ", relatedUri='" + relatedUri + '\'' +
@@ -57,12 +62,12 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(setName, card.setName) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri) && Objects.equals(lastModification, card.lastModification);
+        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(magicSet, card.magicSet) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri) && Objects.equals(lastModification, card.lastModification);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, scryfallId, imgStatus, isFoil, setName, prices, imageUri, relatedUri, purchaseUri, lastModification);
+        return Objects.hash(id, name, scryfallId, imgStatus, isFoil, magicSet, prices, imageUri, relatedUri, purchaseUri, lastModification);
     }
 
     public Long getId() {
@@ -105,12 +110,12 @@ public class Card {
         isFoil = foil;
     }
 
-    public String getSetName() {
-        return setName;
+    public MagicSet getMagicSet() {
+        return magicSet;
     }
 
-    public void setSetName(String setName) {
-        this.setName = setName;
+    public void setMagicSet(MagicSet magicSet) {
+        this.magicSet = magicSet;
     }
 
     public String getPrices() {
@@ -153,13 +158,13 @@ public class Card {
         this.lastModification = lastModification;
     }
 
-    public Card(Long id, String name, String scryfallId, String imgStatus, boolean isFoil, String setName, String prices, String imageUri, String relatedUri, String purchaseUri, Date lastModification) {
+    public Card(Long id, String name, String scryfallId, String imgStatus, boolean isFoil, MagicSet magicSet, String prices, String imageUri, String relatedUri, String purchaseUri, Date lastModification) {
         this.id = id;
         this.name = name;
         this.scryfallId = scryfallId;
         this.imgStatus = imgStatus;
         this.isFoil = isFoil;
-        this.setName = setName;
+        this.magicSet = magicSet;
         this.prices = prices;
         this.imageUri = imageUri;
         this.relatedUri = relatedUri;

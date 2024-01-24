@@ -2,6 +2,7 @@ package com.magicauction.batchupdater.processor;
 
 import com.magicauction.batchupdater.entity.Card;
 import com.magicauction.batchupdater.entity.CardPojo;
+import com.magicauction.batchupdater.entity.MagicSet;
 import com.magicauction.batchupdater.entity.PriceMap;
 import com.magicauction.batchupdater.entity.UriMap;
 import com.magicauction.batchupdater.entity.repository.CardRepository;
@@ -96,7 +97,7 @@ class BulkSaveDatabaseUpdaterTest {
         card.setId(Long.valueOf(scryfallId));
         card.setScryfallId(scryfallId);
         card.setName("name "+scryfallId);
-        card.setSetName("setName "+scryfallId);
+        card.setMagicSet(new MagicSet());
         card.setImgStatus("status "+scryfallId);
         card.setFoil(true);
         card.setPrices("prices "+scryfallId);

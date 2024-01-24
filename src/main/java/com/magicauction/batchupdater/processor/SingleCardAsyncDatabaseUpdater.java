@@ -61,7 +61,7 @@ public class SingleCardAsyncDatabaseUpdater implements IDatabaseUpdater{
             log.debug("CARD IS PRESENT: [{}] - [{}]", oldC.getName(), oldC.getScryfallId());
         }else{
             //add new card
-            cardRepository.save(Converter.toEntity(card));
+            cardRepository.save(Converter.toEntity(card, null));
             log.debug("CARD NOT IS PRESENT: [{}] - [{}]", card.name(), card.scryfallId());
         }
         log.info("Update finished for: {}", card.name());

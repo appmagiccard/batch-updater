@@ -24,9 +24,7 @@ import java.util.UUID;
 public class Loader {
 
     private static final Logger log = LoggerFactory.getLogger(Loader.class);
-    private static final String PATH_DOWNLOADED = "big_json.json";
-    private static final String PATH_DOWNLOADED_2 = "\\jsons\\%s_big_json.json";
-    private static final String PATH_DOWNLOADED_3 = "F:\\AuctionHouseMagic\\jsons\\%s_%s.json";
+    private static final String PATH_DOWNLOADED = "F:\\AuctionHouseMagic\\jsons\\%s_%s.json";
 
     private final ObjectMapper mapper;
 
@@ -79,6 +77,6 @@ public class Loader {
     }
 
     private String buildPath(int i){
-        return String.format(PATH_DOWNLOADED_3, i,UUID.randomUUID());
+        return String.format(PATH_DOWNLOADED, i,UUID.randomUUID());
     }
 }

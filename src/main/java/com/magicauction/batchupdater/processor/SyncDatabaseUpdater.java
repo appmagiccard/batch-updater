@@ -44,7 +44,7 @@ public class SyncDatabaseUpdater implements IDatabaseUpdater{
             log.debug("CARD IS PRESENT: [{}] - [{}]", oldC.getName(), oldC.getScryfallId());
         }else{
             //add new card
-            cardRepository.save(Converter.toEntity(card));
+            cardRepository.save(Converter.toEntity(card, null));
             log.debug("CARD NOT IS PRESENT: [{}] - [{}]", card.name(), card.scryfallId());
         }
         log.debug("Update finished for: {}", card.name());

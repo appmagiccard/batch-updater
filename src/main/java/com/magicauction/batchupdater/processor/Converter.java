@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.magicauction.batchupdater.entity.Card;
 import com.magicauction.batchupdater.entity.CardPojo;
 import com.magicauction.batchupdater.entity.PriceMap;
+import com.magicauction.batchupdater.entity.MagicSet;
+import com.magicauction.batchupdater.entity.ScryfallSetPojo;
 import com.magicauction.batchupdater.entity.UriMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,30 @@ import java.util.Map;
 public abstract class Converter {
 
     private static final Logger log = LoggerFactory.getLogger(Converter.class);
+
+    public static ScryfallSetPojo toSetPojo(JsonNode json){
+        String name = json.findValue("name").asText();
+        String scryfallId =json.findValue("id").asText();
+        String code = json.findValue("code").asText();
+        String releasedAt = json.findValue("code").asText();
+        String setType= json.findValue("code").asText();
+        Integer cardCount= json.findValue("code").asInt();
+        String parentSetCode= json.findValue("code").asText();
+        boolean isDigital= json.findValue("code").asBoolean();
+        String searchUri = json.findValue("code").asText();
+
+        return new ScryfallSetPojo(
+                name,
+                scryfallId,
+                code,
+                releasedAt,
+                setType,
+                cardCount,
+                parentSetCode,
+                isDigital,
+                searchUri
+                );
+    }
 
     public static CardPojo toCardPojo(JsonNode json){
         String name = json.findValue("name").asText();
@@ -51,13 +77,27 @@ public abstract class Converter {
         );
     }
 
-    public static Card toEntity(CardPojo card) {
+    public static MagicSet toEntity(ScryfallSetPojo set){
+        MagicSet ms = new MagicSet();
+        ms.setName(set.name());
+        ms.setScryfallId(set.id());
+        ms.setCode(set.code());
+        ms.setReleasedAt(set.released_at());
+        ms.setSetType(set.set_type());
+        ms.setCardCount(set.card_count());
+        ms.setParentSetCode(set.parent_set_code());
+        ms.setDigital(set.digital());
+        ms.setSearchUri(set.search_uri());
+        return ms;
+    }
+
+    public static Card toEntity(CardPojo card, MagicSet set) {
         Card nc = new Card();
         nc.setName(card.name());
         nc.setScryfallId(card.scryfallId());
         nc.setImgStatus(card.imgStatus());
         nc.setFoil(card.isFoil());
-        nc.setSetName(card.setName());
+        nc.setMagicSet(set);
         nc.setPrices(card.prices().toString());
         nc.setRelatedUri(card.relatedUri().toString());
         nc.setImageUri(card.imageUri().toString());

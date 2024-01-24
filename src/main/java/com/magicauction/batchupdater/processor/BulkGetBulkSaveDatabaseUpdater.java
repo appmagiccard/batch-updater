@@ -2,16 +2,17 @@ package com.magicauction.batchupdater.processor;
 
 import com.magicauction.batchupdater.entity.Card;
 import com.magicauction.batchupdater.entity.CardPojo;
+import com.magicauction.batchupdater.entity.MagicSet;
 import com.magicauction.batchupdater.entity.repository.CardRepository;
-import com.zaxxer.hikari.HikariDataSource;
+import com.magicauction.batchupdater.entity.repository.SetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,13 +20,12 @@ public class BulkGetBulkSaveDatabaseUpdater implements IDatabaseUpdater{
 
     private static final Logger log = LoggerFactory.getLogger(BulkGetBulkSaveDatabaseUpdater.class);
     private final CardRepository cardRepository;
-    private final Executor taskExecutor;
-    private final HikariDataSource hikariDataSource;
+    private final SetRepository setRepository;
 
-    public BulkGetBulkSaveDatabaseUpdater(CardRepository cardRepository, Executor taskExecutor, HikariDataSource hikariDataSource) {
+    @Autowired
+    public BulkGetBulkSaveDatabaseUpdater(CardRepository cardRepository, SetRepository setRepository) {
         this.cardRepository = cardRepository;
-        this.taskExecutor = taskExecutor;
-        this.hikariDataSource = hikariDataSource;
+        this.setRepository = setRepository;
     }
 
     //findAllByScryfallId
@@ -39,6 +39,7 @@ public class BulkGetBulkSaveDatabaseUpdater implements IDatabaseUpdater{
     }
 
     private Card findCardAndMatch(CardPojo newCard, List<Card> allByScryfallId) {
+
         Optional<Card> oldCOpt = allByScryfallId.stream().filter(oldc -> oldc.getScryfallId().equals(newCard.scryfallId())).findFirst();
         Card card;
         if (oldCOpt.isPresent()){
@@ -50,7 +51,8 @@ public class BulkGetBulkSaveDatabaseUpdater implements IDatabaseUpdater{
             log.debug("CARD IS PRESENT: [{}] - [{}]", oldC.getName(), oldC.getScryfallId());
         }else{
             //add new card
-            card = Converter.toEntity(newCard);
+            Optional<MagicSet> byCode = setRepository.findByCode(newCard.setName());
+            card = Converter.toEntity(newCard, byCode.orElse(null));
             log.debug("CARD NOT IS PRESENT: [{}] - [{}]", newCard.name(), newCard.scryfallId());
         }
         log.debug("Update finished for: {}", newCard.name());
