@@ -62,7 +62,7 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return isFoil == card.isFoil && Objects.equals(id, card.id) && Objects.equals(name, card.name) && Objects.equals(scryfallId, card.scryfallId) && Objects.equals(imgStatus, card.imgStatus) && Objects.equals(magicSet, card.magicSet) && Objects.equals(prices, card.prices) && Objects.equals(imageUri, card.imageUri) && Objects.equals(relatedUri, card.relatedUri) && Objects.equals(purchaseUri, card.purchaseUri) && Objects.equals(lastModification, card.lastModification);
+        return isFoil == card.isFoil && name.equals(card.name) && scryfallId.equals(card.scryfallId) && imgStatus.equals(card.imgStatus) && magicSet.equals(card.magicSet) && prices.equals(card.prices) && imageUri.equals(card.imageUri) && relatedUri.equals(card.relatedUri) && purchaseUri.equals(card.purchaseUri) && lastModification.equals(card.lastModification);
     }
 
     @Override

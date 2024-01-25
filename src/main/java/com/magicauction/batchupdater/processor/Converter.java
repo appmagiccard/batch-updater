@@ -19,7 +19,7 @@ public abstract class Converter {
 
     private static final Logger log = LoggerFactory.getLogger(Converter.class);
 
-    public static ScryfallSetPojo toSetPojo(JsonNode json){
+    /*public static ScryfallSetPojo toSetPojo(JsonNode json){
         String name = json.findValue("name").asText();
         String scryfallId =json.findValue("id").asText();
         String code = json.findValue("code").asText();
@@ -41,7 +41,7 @@ public abstract class Converter {
                 isDigital,
                 searchUri
                 );
-    }
+    }*/
 
     public static CardPojo toCardPojo(JsonNode json){
         String name = json.findValue("name").asText();

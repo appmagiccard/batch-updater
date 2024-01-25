@@ -39,7 +39,6 @@ public class BulkGetBulkSaveDatabaseUpdater implements IDatabaseUpdater{
     }
 
     private Card findCardAndMatch(CardPojo newCard, List<Card> allByScryfallId) {
-
         Optional<Card> oldCOpt = allByScryfallId.stream().filter(oldc -> oldc.getScryfallId().equals(newCard.scryfallId())).findFirst();
         Card card;
         if (oldCOpt.isPresent()){

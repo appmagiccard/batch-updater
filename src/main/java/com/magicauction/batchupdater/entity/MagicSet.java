@@ -46,8 +46,8 @@ public class MagicSet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MagicSet set = (MagicSet) o;
-        return isDigital == set.isDigital && Objects.equals(id, set.id) && Objects.equals(name, set.name) && Objects.equals(scryfallId, set.scryfallId) && Objects.equals(code, set.code) && Objects.equals(releasedAt, set.releasedAt) && Objects.equals(setType, set.setType) && Objects.equals(cardCount, set.cardCount) && Objects.equals(parentSetCode, set.parentSetCode) && Objects.equals(searchUri, set.searchUri);
+        MagicSet magicSet = (MagicSet) o;
+        return isDigital == magicSet.isDigital && name.equals(magicSet.name) && scryfallId.equals(magicSet.scryfallId) && code.equals(magicSet.code) && releasedAt.equals(magicSet.releasedAt) && setType.equals(magicSet.setType) && cardCount.equals(magicSet.cardCount) && parentSetCode.equals(magicSet.parentSetCode) && searchUri.equals(magicSet.searchUri);
     }
 
     @Override

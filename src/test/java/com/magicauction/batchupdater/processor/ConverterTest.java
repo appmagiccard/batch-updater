@@ -3,8 +3,11 @@ package com.magicauction.batchupdater.processor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.magicauction.batchupdater.entity.Card;
 import com.magicauction.batchupdater.entity.CardPojo;
+import com.magicauction.batchupdater.entity.MagicSet;
 import com.magicauction.batchupdater.entity.PriceMap;
+import com.magicauction.batchupdater.entity.ScryfallSetPojo;
 import com.magicauction.batchupdater.entity.UriMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +17,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class ConverterTest {
@@ -139,6 +143,31 @@ class ConverterTest {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+    @Test void convertToSetPojo_whenIsOk(){
+        ScryfallSetPojo setPojo = new ScryfallSetPojo(
+                "Commander Legends: Battle for Baldur's Gate",
+                "5e4c3fe8-fd57-4b20-ad56-c03790a16cea",
+                "clb",
+                "2022-06-10",
+                "draft_innovation",
+                936,
+                null,
+                false,
+                "https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aclb&unique=prints"
+        );
+        MagicSet expected = new MagicSet();
+        expected.setName("Commander Legends: Battle for Baldur's Gate");
+        expected.setCardCount(936);
+        expected.setCode("clb");
+        expected.setScryfallId("5e4c3fe8-fd57-4b20-ad56-c03790a16cea");
+        expected.setDigital(false);
+        expected.setSearchUri("https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aclb&unique=prints");
+        expected.setParentSetCode(null);
+        expected.setSetType("draft_innovation");
+        expected.setReleasedAt("2022-06-10");
+        MagicSet actual = Converter.toEntity(setPojo);
+        assertEquals(expected, actual);
+    }
 
     @Test void convertToCardPojo_whenIsOk() throws JsonProcessingException {
         CardPojo expected = new CardPojo(
@@ -157,6 +186,46 @@ class ConverterTest {
         assertEquals(expected, actual);
     }
 
+    @Test void convertToEntityWithSet_whenIsOk(){
+        MagicSet magicSet = new MagicSet();
+        magicSet.setName("Commander Legends: Battle for Baldur's Gate");
+        magicSet.setCardCount(936);
+        magicSet.setCode("clb");
+        magicSet.setScryfallId("5e4c3fe8-fd57-4b20-ad56-c03790a16cea");
+        magicSet.setDigital(false);
+        magicSet.setSearchUri("https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3Aclb&unique=prints");
+        magicSet.setParentSetCode(null);
+        magicSet.setSetType("draft_innovation");
+        magicSet.setReleasedAt("2022-06-10");
+        Date lastMod = new Date();
+        Card expected = new Card();
+        expected.setMagicSet(magicSet);
+        expected.setLastModification(lastMod);
+        expected.setPrices("{}");
+        expected.setImageUri("{}");
+        expected.setPurchaseUri("{}");
+        expected.setRelatedUri("{}");
+        expected.setFoil(false);
+        expected.setImgStatus("highres_scan");
+        expected.setScryfallId("86bf43b1-8d4e-4759-bb2d-0b2e03ba7012");
+        expected.setName("Static Orb");
+
+        CardPojo input = new CardPojo(
+                "Static Orb",
+                "86bf43b1-8d4e-4759-bb2d-0b2e03ba7012",
+                "highres_scan",
+                false,
+                "clb",
+                lastMod,
+                new PriceMap(),
+                new UriMap(),
+                new UriMap(),
+                new UriMap()
+        );
+
+        Card actual = Converter.toEntity(input, magicSet);
+        assertNotNull(actual);
+    }
 
     @Test void convertToCardPojo_whenIsOk_ButNotEquals() throws JsonProcessingException {
         CardPojo unexpected = new CardPojo(
